@@ -54,11 +54,14 @@ coverage). Keep the existing entries.
 2. Find the latest standards release with `git ls-remote --tags https://github.com/edward-sf/standards`
    (or `gh release view -R edward-sf/standards`). Pin the exact tag, e.g. `v1.3.0`, never a branch.
 3. Copy `.scaffold/files/ci.yml` to `.github/workflows/ci.yml` and fill in `<stack>` and `<version>`.
-4. Add the project's package ecosystem (npm, pip, cargo, nuget) to `.github/dependabot.yml`,
+   If the project has generated code or its own Semgrep rules, uncomment the matching `with:`
+   inputs; otherwise delete the commented block.
+4. Copy `.scaffold/files/pr-policy.yml` to `.github/workflows/pr-policy.yml` and fill in
+   `<version>` with the same tag.
+5. Add the project's package ecosystem (npm, pip, cargo, nuget) to `.github/dependabot.yml`,
    next to the existing github-actions entry.
-5. Don't change GitHub settings yourself. In the final summary, tell me to make the `ci` job a
-   required check in the repo's ruleset. If the standards repo is private, also tell me to
-   allow access to its workflows under its Settings > Actions > General.
+6. Don't change GitHub settings yourself. In the final summary, tell me to require
+   `ci / required` and `policy / required` in the repo's `main` ruleset.
 
 ## 8. Area skills
 
@@ -77,7 +80,7 @@ Delete `.scaffold/`, `.github/workflows/scaffold.yml`, and this skill's folder
 1. Placeholders: `grep -rnE '<[A-Za-z][^>]*(>|$)' AGENTS.md README.md .github .claude` should print
    nothing. HTML comments (`<!--`) in the PR template don't match and are fine.
 2. `CHECK_CMD` is set, or the AGENTS.md Gotchas bullet says why not.
-3. `.github/workflows/ci.yml` has no `<` left.
+3. `.github/workflows/ci.yml` and `.github/workflows/pr-policy.yml` have no `<` left.
 4. If the full check can run, run it.
 5. Commit as `chore: initialize project from scaffold` and show me the summary, including the
-   manual GitHub steps from 7.5. Offer to push and open a PR.
+   manual GitHub steps from 7.6. Offer to push and open a PR.

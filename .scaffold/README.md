@@ -12,8 +12,8 @@ project's README template.
 3. Run `/scaffold-init`. It fills in `AGENTS.md` and `README.md`, then sets the check hook,
    permissions, `.gitignore`, CI and Dependabot. It also creates any area skills you ask for and
    removes the template-only files. Then it commits on `chore/scaffold-init`.
-4. Do the GitHub steps it lists. Make the `ci` job a required check in the repo's ruleset. If
-   the standards repo is private, allow access to its workflows from this repo.
+4. Do the GitHub steps it lists: require `ci / required` and `policy / required` in the repo's
+   `main` ruleset.
 
 ## What a project gets
 
@@ -27,8 +27,9 @@ project's README template.
 | `.claude/hooks/check-before-stop.sh` | Runs the full check when the agent finishes a turn with changes outside `docs/`, and sends failures back to it. |
 | `.claude/skills/<area>/` | Area skills created from `example-area` during init. |
 | `.github/workflows/ci.yml` | Calls the standards repo's reusable CI, pinned to a release tag. Created from `.scaffold/files/ci.yml`. |
+| `.github/workflows/pr-policy.yml` | Calls the standards repo's PR policy (Conventional Commits, PR checklist) at the same tag. Created from `.scaffold/files/pr-policy.yml`. |
 | `.github/dependabot.yml` | Opens PRs when the standards repo releases, and for the project's dependencies. |
-| `.github/pull_request_template.md` | Mirrors the PR rules and definition of done in `AGENTS.md`. |
+| `.github/pull_request_template.md` | A copy of the standards template, whose checklist `pr-policy` enforces. Mirrors the definition of done in `AGENTS.md`. |
 | `.gitattributes`, `.editorconfig` | LF everywhere (so hooks run under Git Bash on Windows), UTF-8, and baseline indentation. |
 | `.gitignore` | Agent working state (`HANDOFF.md`, `.worktrees/`), personal overrides, env files, and stack entries. |
 

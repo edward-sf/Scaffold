@@ -1,0 +1,13 @@
+# Calls the shared PR policy from the standards repo: Conventional Commits and the PR checklist.
+# Copied to .github/workflows/pr-policy.yml by /scaffold-init, which fills in the version (the
+# same tag as ci.yml). It's separate from ci.yml so editing the PR description reruns only this.
+# Make `policy / required` a required check in this repo's ruleset.
+name: PR policy
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  policy:
+    uses: edward-sf/standards/.github/workflows/pr-policy.yml@<version>

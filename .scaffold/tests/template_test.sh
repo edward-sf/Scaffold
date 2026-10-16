@@ -8,15 +8,16 @@ fail() { echo "  $*" >&2; problems=1; }
 
 for f in AGENTS.md README.md .gitignore .gitattributes .editorconfig \
          .github/pull_request_template.md .github/dependabot.yml \
-         .scaffold/files/ci.yml .claude/skills/example-area/SKILL.md \
+         .scaffold/files/ci.yml .scaffold/files/pr-policy.yml .claude/skills/example-area/SKILL.md \
          .claude/skills/scaffold-init/SKILL.md; do
   [ -f "$f" ] || fail "missing $f"
 done
 
-# Every path the init skill mentions must exist, so it doesn't drift from the template.
+# Every path the init skill mentions must exist, so it doesn't drift from the template. Caller
+# workflows are created by init, so they're exempt.
 for p in $(grep -oE '`(\.[a-z]+/[^` ]+|[A-Z]+\.md)`' .claude/skills/scaffold-init/SKILL.md \
            | tr -d '`' | grep -v '[<*]' | sort -u); do
-  [ -e "$p" ] || [ "$p" = ".github/workflows/ci.yml" ] || fail "scaffold-init mentions missing path: $p"
+  [ -e "$p" ] || case "$p" in .github/workflows/*) ;; *) false ;; esac || fail "scaffold-init mentions missing path: $p"
 done
 
 # The init skill's placeholder grep must catch every placeholder line in the templates,
@@ -29,6 +30,15 @@ for f in AGENTS.md README.md; do
 done
 leftover="$(grep -rnE --exclude-dir=example-area --exclude-dir=scaffold-init -- "$pattern" .github .claude)"
 [ -z "$leftover" ] || fail "placeholder grep flags files that survive init: $leftover"
+
+# The PR template is a copy of the standards one, whose checklist pr-policy enforces. A drifted
+# copy would make every project PR fail the checklist check.
+standards_template="$(curl -fsSL --max-time 20 "https://raw.githubusercontent.com/edward-sf/standards/${STANDARDS_REF:-main}/.github/pull_request_template.md")"
+if [ -z "$standards_template" ]; then
+  echo "  skipped: couldn't fetch the standards PR template" >&2
+elif [ "$standards_template" != "$(cat .github/pull_request_template.md)" ]; then
+  fail ".github/pull_request_template.md differs from edward-sf/standards; copy it from there"
+fi
 
 # Skills: frontmatter name matches the folder.
 for s in .claude/skills/*/SKILL.md; do

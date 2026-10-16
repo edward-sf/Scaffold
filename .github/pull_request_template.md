@@ -14,6 +14,8 @@
 
 ## Checklist
 
+<!-- Tick each item, or leave it unticked and explain why after it. pr-policy fails the PR otherwise. -->
+
 - [ ] Full check passes with zero errors and warnings
 - [ ] New behavior has tests; bug fixes start with a failing test
 - [ ] Diff contains only changes this PR needs
