@@ -1,0 +1,16 @@
+# Calls the shared CI from the standards repo. Copied to .github/workflows/ci.yml by
+# /scaffold-init, which fills in the stack and the version.
+# Make the `ci` job a required check in this repo's ruleset so nothing merges without it.
+# Dependabot (.github/dependabot.yml) opens a PR when the standards repo tags a new release.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    uses: edward-sf/standards/.github/workflows/ci-<stack>.yml@<version>
+    # Uncomment if the shared workflow needs this repo's secrets.
+    # secrets: inherit

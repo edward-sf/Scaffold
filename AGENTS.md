@@ -1,7 +1,8 @@
 # AGENTS.md
 
 <!--
-TEMPLATE NOTES — delete this block once filled in.
+TEMPLATE NOTES — delete this block once filled in. Run /scaffold-init to do it for you.
+Maintaining the Scaffold template itself? Read .scaffold/README.md instead; this file is a template.
 - Fill every <placeholder>. Delete any section that doesn't apply rather than leaving it vague.
 - Target: under ~100 lines. For every line ask: "Would removing this cause the agent to make a mistake?"
 - Don't restate what tooling enforces (lint/format rules) or what the agent can read from the code.

@@ -1,0 +1,10 @@
+# Keeps GitHub Actions references current, including the pinned standards workflow in
+# .github/workflows/ci.yml. /scaffold-init adds an entry for the project's package ecosystem.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
