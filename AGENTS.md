@@ -61,7 +61,8 @@ changes. Treat its output as a failing check, not as noise.
 - When requirements are ambiguous, ask instead of guessing.
 - Branches: `<type>/<short-description>` (e.g. `feat/pantry-restock`). Never commit to `main`.
 - Commits: Conventional Commits (`feat:`, `fix:`, `test:`, `refactor:`, `docs:`, `chore:`).
-- PR description: what changed, why, how it was verified, anything left out of scope.
+- PR description: fill in `.github/pull_request_template.md`. `pr-policy` fails the PR until every
+  checklist item is ticked or explained. Architecture changes need a Mermaid diagram.
 - Finish every branch with a PR, never a local merge into `main` (in superpowers'
   finishing-a-development-branch, choose "Push and create a Pull Request").
 

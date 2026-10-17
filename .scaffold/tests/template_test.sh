@@ -32,8 +32,12 @@ leftover="$(grep -rnE --exclude-dir=example-area --exclude-dir=scaffold-init -- 
 [ -z "$leftover" ] || fail "placeholder grep flags files that survive init: $leftover"
 
 # The PR template is a copy of the standards one, whose checklist pr-policy enforces. A drifted
-# copy would make every project PR fail the checklist check.
-standards_template="$(curl -fsSL --max-time 20 "https://raw.githubusercontent.com/edward-sf/standards/${STANDARDS_REF:-main}/.github/pull_request_template.md")"
+# copy would make every project PR fail the checklist check. Compare against the latest release,
+# the tag /scaffold-init pins, not main, which can hold unreleased changes.
+standards_ref="${STANDARDS_REF:-$(git ls-remote --tags --refs https://github.com/edward-sf/standards 'v*' 2>/dev/null \
+  | sed 's|.*refs/tags/||' | sort -V | tail -n 1)}"
+standards_template=""
+[ -n "$standards_ref" ] && standards_template="$(curl -fsSL --max-time 20 "https://raw.githubusercontent.com/edward-sf/standards/$standards_ref/.github/pull_request_template.md")"
 if [ -z "$standards_template" ]; then
   echo "  skipped: couldn't fetch the standards PR template" >&2
 elif [ "$standards_template" != "$(cat .github/pull_request_template.md)" ]; then

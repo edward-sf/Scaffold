@@ -51,17 +51,23 @@ coverage). Keep the existing entries.
 
 1. Ask me which standards workflow fits the stack (e.g. `ci-python.yml`). If `gh` is available
    and authenticated, list the options with `gh api repos/edward-sf/standards/contents/.github/workflows`.
+   If no `ci-<stack>.yml` fits, skip step 3, keep `pr-policy.yml`, and add a Gotchas bullet in
+   AGENTS.md saying standards has no CI for this stack yet.
 2. Find the latest standards release with `git ls-remote --tags https://github.com/edward-sf/standards`
    (or `gh release view -R edward-sf/standards`). Pin the exact tag, e.g. `v1.3.0`, never a branch.
 3. Copy `.scaffold/files/ci.yml` to `.github/workflows/ci.yml` and fill in `<stack>` and `<version>`.
    If the project has generated code or its own Semgrep rules, uncomment the matching `with:`
-   inputs; otherwise delete the commented block.
+   inputs; otherwise delete the commented block. Check the workflow's assumptions in the standards
+   README and tell me which the repo doesn't meet yet. For `ci-python.yml`: `pyproject.toml`, a
+   current `uv.lock`, `ruff`, `mypy` and `pytest` as dev dependencies, and at least one test
+   (pytest fails when it collects none).
 4. Copy `.scaffold/files/pr-policy.yml` to `.github/workflows/pr-policy.yml` and fill in
    `<version>` with the same tag.
-5. Add the project's package ecosystem (npm, pip, cargo, nuget) to `.github/dependabot.yml`,
-   next to the existing github-actions entry.
+5. Add the project's package ecosystem (npm, pip, uv, cargo, nuget) to `.github/dependabot.yml`,
+   next to the existing github-actions entry, with `commit-message: prefix: build`. `pr-policy`
+   checks Dependabot PRs by title only, and a title without a Conventional Commits type fails.
 6. Don't change GitHub settings yourself. In the final summary, tell me to require
-   `ci / required` and `policy / required` in the repo's `main` ruleset.
+   `ci / required` (if `ci.yml` was created) and `policy / required` in the repo's `main` ruleset.
 
 ## 8. Area skills
 
@@ -80,7 +86,7 @@ Delete `.scaffold/`, `.github/workflows/scaffold.yml`, and this skill's folder
 1. Placeholders: `grep -rnE '<[A-Za-z][^>]*(>|$)' AGENTS.md README.md .github .claude` should print
    nothing. HTML comments (`<!--`) in the PR template don't match and are fine.
 2. `CHECK_CMD` is set, or the AGENTS.md Gotchas bullet says why not.
-3. `.github/workflows/ci.yml` and `.github/workflows/pr-policy.yml` have no `<` left.
+3. `.github/workflows/ci.yml` (if created) and `.github/workflows/pr-policy.yml` have no `<` left.
 4. If the full check can run, run it.
 5. Commit as `chore: initialize project from scaffold` and show me the summary, including the
    manual GitHub steps from 7.6. Offer to push and open a PR.
