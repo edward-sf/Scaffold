@@ -1,0 +1,14 @@
+# Calls the shared PR policy from the standards repo: Conventional Commits and the PR checklist.
+# It runs in the template too, so Scaffold follows its own rules. /scaffold-init re-pins it to the
+# latest standards release (the same tag as ci.yml), and Dependabot keeps it current after that.
+# It's separate from ci.yml so editing the PR description reruns only this.
+# Make `policy / required` a required check in this repo's ruleset.
+name: PR policy
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  policy:
+    uses: edward-sf/standards/.github/workflows/pr-policy.yml@v1.0.1

@@ -1,0 +1,15 @@
+# Tests the Scaffold template itself. Runs only in the template repo; /scaffold-init deletes it.
+name: Scaffold
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    if: github.repository == 'edward-sf/Scaffold'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash .scaffold/tests/run.sh

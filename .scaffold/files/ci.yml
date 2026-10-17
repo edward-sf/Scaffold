@@ -1,0 +1,18 @@
+# Calls the shared CI from the standards repo. Copied to .github/workflows/ci.yml by
+# /scaffold-init, which fills in the stack and the version.
+# Make `ci / required` a required check in this repo's ruleset so nothing merges without it.
+# Dependabot (.github/dependabot.yml) opens a PR when the standards repo tags a new release.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    uses: edward-sf/standards/.github/workflows/ci-<stack>.yml@<version>
+    # Optional inputs; see the standards README. Each change here is a reviewed exception.
+    # with:
+    #   semgrep-config: .semgrep          # project-local Semgrep rules
+    #   semgrep-exclude: /src/generated/  # paths Semgrep skips (.semgrepignore is ignored)
