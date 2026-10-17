@@ -61,8 +61,7 @@ coverage). Keep the existing entries.
    README and tell me which the repo doesn't meet yet. For `ci-python.yml`: `pyproject.toml`, a
    current `uv.lock`, `ruff`, `mypy` and `pytest` as dev dependencies, and at least one test
    (pytest fails when it collects none).
-4. Copy `.scaffold/files/pr-policy.yml` to `.github/workflows/pr-policy.yml` and fill in
-   `<version>` with the same tag.
+4. Set the tag in `.github/workflows/pr-policy.yml` to the same tag, if it isn't already.
 5. Add the project's package ecosystem (npm, pip, uv, cargo, nuget) to `.github/dependabot.yml`,
    next to the existing github-actions entry, with `commit-message: prefix: build`. `pr-policy`
    checks Dependabot PRs by title only, and a title without a Conventional Commits type fails.
@@ -86,7 +85,8 @@ Delete `.scaffold/`, `.github/workflows/scaffold.yml`, and this skill's folder
 1. Placeholders: `grep -rnE '<[A-Za-z][^>]*(>|$)' AGENTS.md README.md .github .claude` should print
    nothing. HTML comments (`<!--`) in the PR template don't match and are fine.
 2. `CHECK_CMD` is set, or the AGENTS.md Gotchas bullet says why not.
-3. `.github/workflows/ci.yml` (if created) and `.github/workflows/pr-policy.yml` have no `<` left.
+3. `.github/workflows/ci.yml` (if created) has no `<` left, and it and `.github/workflows/pr-policy.yml`
+   pin the same tag.
 4. If the full check can run, run it.
 5. Commit as `chore: initialize project from scaffold` and show me the summary, including the
    manual GitHub steps from 7.6. Offer to push and open a PR.

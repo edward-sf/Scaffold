@@ -8,13 +8,13 @@ fail() { echo "  $*" >&2; problems=1; }
 
 for f in AGENTS.md README.md .gitignore .gitattributes .editorconfig \
          .github/pull_request_template.md .github/dependabot.yml \
-         .scaffold/files/ci.yml .scaffold/files/pr-policy.yml .claude/skills/example-area/SKILL.md \
+         .scaffold/files/ci.yml .github/workflows/pr-policy.yml .claude/skills/example-area/SKILL.md \
          .claude/skills/scaffold-init/SKILL.md; do
   [ -f "$f" ] || fail "missing $f"
 done
 
 # Every path the init skill mentions must exist, so it doesn't drift from the template. Caller
-# workflows are created by init, so they're exempt.
+# workflows are exempt: init creates ci.yml.
 for p in $(grep -oE '`(\.[a-z]+/[^` ]+|[A-Z]+\.md)`' .claude/skills/scaffold-init/SKILL.md \
            | tr -d '`' | grep -v '[<*]' | sort -u); do
   [ -e "$p" ] || case "$p" in .github/workflows/*) ;; *) false ;; esac || fail "scaffold-init mentions missing path: $p"
@@ -43,6 +43,10 @@ if [ -z "$standards_template" ]; then
 elif [ "$standards_template" != "$(cat .github/pull_request_template.md)" ]; then
   fail ".github/pull_request_template.md differs from edward-sf/standards; copy it from there"
 fi
+
+# The template runs pr-policy on its own PRs, so its caller must pin an exact release tag.
+grep -qE '^ +uses: edward-sf/standards/\.github/workflows/pr-policy\.yml@v[0-9]+\.[0-9]+\.[0-9]+$' \
+  .github/workflows/pr-policy.yml || fail ".github/workflows/pr-policy.yml must pin an exact standards tag"
 
 # Skills: frontmatter name matches the folder.
 for s in .claude/skills/*/SKILL.md; do

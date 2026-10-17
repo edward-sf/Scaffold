@@ -27,7 +27,7 @@ project's README template.
 | `.claude/hooks/check-before-stop.sh` | Runs the full check when the agent finishes a turn with changes outside `docs/`, and sends failures back to it. |
 | `.claude/skills/<area>/` | Area skills created from `example-area` during init. |
 | `.github/workflows/ci.yml` | Calls the standards repo's reusable CI, pinned to a release tag. Created from `.scaffold/files/ci.yml`. |
-| `.github/workflows/pr-policy.yml` | Calls the standards repo's PR policy (Conventional Commits, PR checklist) at the same tag. Created from `.scaffold/files/pr-policy.yml`. |
+| `.github/workflows/pr-policy.yml` | Calls the standards repo's PR policy (Conventional Commits, PR checklist) at the same tag. Also runs on the template's own PRs; init re-pins it to the latest release. |
 | `.github/dependabot.yml` | Opens PRs when the standards repo releases, and for the project's dependencies. |
 | `.github/pull_request_template.md` | A copy of the standards template, whose checklist `pr-policy` enforces. Mirrors the definition of done in `AGENTS.md`. |
 | `.gitattributes`, `.editorconfig` | LF everywhere (so hooks run under Git Bash on Windows), UTF-8, and baseline indentation. |
